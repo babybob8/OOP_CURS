@@ -1,0 +1,21 @@
+#ifndef PARSE_H
+#define PARSE_H
+
+#include <string>
+#include <vector>
+
+#include <QString>
+
+enum class TableType
+{
+    Student,
+    Work,
+    Result,
+    Err
+};
+
+std::vector<std::string> split_csv_line(const std::string& line);
+std::vector<std::vector<std::string>> c_parse_file(const QString& filename);
+TableType get_TableType(const std::vector<std::string>& head);
+
+#endif // PARSE_H

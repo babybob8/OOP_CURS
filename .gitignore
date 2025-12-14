@@ -1,0 +1,23 @@
+# Qt-specific
+*.pro.user
+*.user
+build/
+debug/
+release/
+*.moc
+moc_*.cpp
+ui_*.h
+qrc_*.cpp
+Makefile*
+*.exe
+*.dll
+*.pdb
+*.ilk
+*.obj
+*.o
+
+# Other ignores
+.DS_Store  # Mac
+Thumbs.db  # Windows
+*.log
+*.tmp
