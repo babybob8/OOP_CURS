@@ -5,7 +5,8 @@ CONFIG += c++17
 SOURCES += \
     book.cpp \
     logger.cpp \
-    parse.cpp
+    parse.cpp \
+    tests.cpp
 
 HEADERS += \
     book.h \

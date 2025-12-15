@@ -69,6 +69,18 @@ void c_compile_res(QTableWidget* table, std::map<TableType, std::vector<std::vec
 
     log_info("Resulting table compiled.");
 
+    try
+    {
+        write_csv(comiled_table, Config::OutPath.data());
+    }
+    catch (const std::exception& e)
+    {
+        std::string msg = "Results were not written in +" + std::string(Config::OutPath.data())
+                + ". Error: " + std::string(e.what());
+        log_error(msg);
+        QMessageBox::critical(nullptr, "Error", QString::fromStdString(msg));
+    }
+
     c_update_table(table, comiled_table);
 }
 
@@ -138,7 +150,7 @@ MainWindow::MainWindow(QWidget *parent)
         }
         catch (const std::exception& e)
         {
-            QMessageBox::critical(nullptr, "Error", e.what());
+            critical_message_handler(e.what());
         }
     });
 
@@ -159,7 +171,7 @@ MainWindow::MainWindow(QWidget *parent)
             }
             catch (const std::exception& e)
             {
-                QMessageBox::critical(nullptr, "Error", e.what());
+                critical_message_handler(e.what());
             }
         }
     });
@@ -181,7 +193,7 @@ MainWindow::MainWindow(QWidget *parent)
             }
             catch (const std::exception& e)
             {
-                QMessageBox::critical(nullptr, "Error", e.what());
+                critical_message_handler(e.what());
             }
         }
     });
@@ -203,7 +215,7 @@ MainWindow::MainWindow(QWidget *parent)
             }
             catch (const std::exception& e)
             {
-                QMessageBox::critical(nullptr, "Error", e.what());
+                critical_message_handler(e.what());
             }
         }
     });

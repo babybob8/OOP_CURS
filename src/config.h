@@ -3,22 +3,19 @@
 
 #include <string>
 
-namespace Config
-{
-    constexpr std::string_view DefaultLogPath = "log.txt";
-    constexpr std::string_view DefaultOutPath = "out.csv";
-
-    constexpr bool DebugEnabled =
+struct Config {
+    inline static bool CheckConditions = false;
+    inline static bool AdditionalNameCheck = false;
+    inline static const char* DefaultLogPath = "log.txt";
+    inline static const char* DefaultOutPath = "out.csv";
+    inline static std::string_view LogPath = DefaultLogPath;
+    inline static std::string_view OutPath = DefaultOutPath;
+    constexpr static bool DebugEnabled =
     #ifdef DEBUG_BUILD
         true;
     #else
         false;
     #endif
-
-    extern bool CheckConditions;
-    extern bool AdditionalNameCheck;
-    inline std::string_view LogPath = DefaultLogPath;
-    inline std::string_view OutPath = DefaultLogPath;
-}
+};
 
 #endif // CONFIG_H

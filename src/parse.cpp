@@ -1,10 +1,12 @@
 #include "parse.h"
+#include "log.h"
 
 #include <QString>
 #include <algorithm>
 #include <fstream>
 #include <sstream>
 #include <exception>
+#include <regex>
 
 std::vector<std::string> split_csv_line(const std::string& line)
 {
@@ -33,6 +35,7 @@ std::vector<std::vector<std::string>> c_parse_file(const QString& filename)
     }
 
     file.close();
+    log_info("File [" + filename.toStdString() + "] has been parsed.");
     return file_content;
 }
 
@@ -51,6 +54,7 @@ std::vector<std::vector<std::string>> c_parse_file(const std::string& filename)
     }
 
     file.close();
+    log_info("File [" + filename + "] has been parsed.");
     return file_content;
 }
 
@@ -88,4 +92,40 @@ TableType get_TableType(const std::vector<std::string>& head)
     if (!isStud && isWork && !isResult) return TableType::Work;
     if (!isStud && !isWork && isResult) return TableType::Result;
     return TableType::Err;
+}
+
+void write_csv(const std::vector<std::vector<std::string>>& table, const std::string& f_name)
+{
+    if (f_name.size() < 4 || f_name.substr(f_name.size() - 4) != ".csv")
+    {
+        throw std::runtime_error("File name must end with .csv");
+    }
+
+    std::ofstream file(f_name);
+    if (!file.is_open())
+    {
+        throw std::runtime_error("Cannot open file: " + f_name);
+    }
+
+    for (const auto& row : table)
+    {
+        for (size_t i = 0; i < row.size(); ++i)
+        {
+            std::string val = row[i];
+            bool needs_quotes = (val.find(',') != std::string::npos) || (val.find('"') != std::string::npos) || (val.find('\n') != std::string::npos);
+            if (needs_quotes)
+            {
+                val = std::regex_replace(val, std::regex("\""), "\"\"");
+                val = '"' + val + '"';
+            }
+            file << val;
+            if (i < row.size() - 1)
+            {
+                file << ",";
+            }
+        }
+        file << "\n";
+    }
+
+    file.close();
 }

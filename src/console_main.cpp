@@ -3,6 +3,8 @@
 #include "logger.h"
 #include "log.h"
 #include "config.h"
+#include "tests.cpp"
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -59,32 +61,125 @@ void printTable(const std::vector<std::vector<std::string>>& table)
 
 int main(int argc, char* argv[])
 {
-    log_info("Console app started.");
+    log_info("Application started.");
+    log_debug("In Debug mode.");
 
-#ifdef _WIN32
+    #ifdef _WIN32
     SetConsoleOutputCP(65001);
-#endif
+    #endif
 
     std::cout.imbue(std::locale(""));
-    if (argc != 4)
+    std::string students_csv;
+    std::string works_csv;
+    std::string results_csv;
+    std::string out_path = std::string(Config::DefaultOutPath);
+    bool show_help = false;
+    bool run_tests = false;
+
+    std::vector<std::string> positional_args;
+
+    for (int i = 1; i < argc; ++i)
     {
-        std::cerr << "Usage: " << argv[0] << " <students.csv> <works.csv> <results.csv>" << std::endl;
+        std::string arg = argv[i];
+        if (arg == "--test")
+        {
+            run_tests = true;
+        }
+        else if (arg == "--help")
+        {
+            show_help = true;
+            log_info("Showing help.");
+        }
+        else if (arg == "--out-path")
+        {
+            if (i + 1 < argc)
+            {
+                out_path = argv[++i];
+                Config::OutPath = std::string_view(out_path);
+            }
+            else
+            {
+                std::cerr << "Error: --out-path requires an argument." << std::endl;
+                log_error("Missing argument for --out-path.");
+                return 1;
+            }
+        }
+        else if (arg == "-c")
+        {
+            Config::CheckConditions = true;
+            log_info("Condition checks enabled via special key.");
+
+        }
+        else if (arg == "-a")
+        {
+            Config::AdditionalNameCheck = true;
+            log_info("Additional name checks enabled via special key.");
+
+        }
+        else if (arg[0] == '-')
+        {
+            std::cerr << "Unknown option: " << arg << std::endl;
+            log_error("Unknown option.");
+            return 1;
+        }
+        else
+        {
+            positional_args.push_back(arg);
+        }
+    }
+
+    if (run_tests)
+    {
+        runTests();
+        return 0;
+    }
+
+    if (show_help)
+    {
+        std::cout << "Usage: " << argv[0] << " [options] <students.csv> <works.csv> <results.csv>" << std::endl;
+        std::cout << "Options:" << std::endl;
+        std::cout << "  --help        Show this help message" << std::endl;
+        std::cout << "  --out-path <path>  Set output path (default: out.csv)" << std::endl;
+        std::cout << "  -c            Enable check conditions" << std::endl;
+        std::cout << "  -a            Enable additional name check" << std::endl;
+        return 0;
+    }
+
+    if (positional_args.size() != 3)
+    {
+        std::cerr << "Usage: " << argv[0] << " [options] <students.csv> <works.csv> <results.csv>" << std::endl;
         log_error("Invalid arguments.");
         return 1;
     }
+
+    students_csv = positional_args[0];
+    works_csv = positional_args[1];
+    results_csv = positional_args[2];
     try
     {
-        std::string studentsFile = argv[1];
-        std::string worksFile = argv[2];
-        std::string resultsFile = argv[3];
-        auto studentsTable = c_parse_file(studentsFile);
-        auto worksTable = c_parse_file(worksFile);
-        auto resultsTable = c_parse_file(resultsFile);
+        auto studentsTable = c_parse_file(students_csv);
+        auto worksTable = c_parse_file(works_csv);
+        auto resultsTable = c_parse_file(results_csv);
         log_info("Files parsed successfully.");
+
         auto currentResults = generateCurrentResults(studentsTable, worksTable, resultsTable);
+        log_info("Results generated.");
+
+        try
+        {
+            write_csv(currentResults, Config::OutPath.data());
+            log_info("Results written.");
+        }
+        catch (const std::exception& e)
+        {
+            log_error("Results were not written in +" + std::string(Config::OutPath.data())
+                      + ". Error: " + std::string(e.what()));
+        }
+
         std::cout << "Generated Results:" << std::endl;
+
         printTable(currentResults);
-        log_info("Results generated and printed.");
+        log_info("Results printed.");
     }
     catch (const std::exception& e)
     {
