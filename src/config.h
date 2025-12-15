@@ -6,10 +6,7 @@
 namespace Config
 {
     constexpr std::string_view DefaultLogPath = "log.txt";
-    constexpr std::string_view LogPath = DefaultLogPath; /* я подумал типо можно будет  менять   LogPath
-                                                            и типо изначально он дефолт, а потом подумал
-                                                            что я не оч понимаю   как   это    constexpr
-                                                            сделать. ну лан пусть так пока останеться */
+    constexpr std::string_view DefaultOutPath = "out.csv";
 
     constexpr bool DebugEnabled =
     #ifdef DEBUG_BUILD
@@ -17,6 +14,11 @@ namespace Config
     #else
         false;
     #endif
+
+    extern bool CheckConditions;
+    extern bool AdditionalNameCheck;
+    std::string_view LogPath = DefaultLogPath;
+    std::string_view OutPath = DefaultLogPath;
 }
 
 #endif // CONFIG_H

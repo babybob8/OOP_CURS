@@ -9,6 +9,20 @@
 #include <string>
 #include <iomanip>
 #include <exception>
+#include <algorithm>
+
+#include <Windows.h>
+
+size_t visual_length(const std::string& str)
+{
+    size_t len = 0;
+    for (size_t i = 0; i < str.size(); ++i)
+    {
+        if ((str[i] & 0xC0) != 0x80)
+            ++len;
+    }
+    return len;
+}
 
 void printTable(const std::vector<std::vector<std::string>>& table)
 {
@@ -22,19 +36,25 @@ void printTable(const std::vector<std::vector<std::string>>& table)
     for (const auto& row : table)
     {
         for (size_t i = 0; i < row.size(); ++i)
-            colWidths[i] = std::max(colWidths[i], row[i].length());
+            colWidths[i] = std::max(colWidths[i], visual_length(row[i]));
     }
 
     for (size_t i = 0; i < table[0].size(); ++i)
-        std::cout << std::left << std::setw(colWidths[i] + 2) << table[0][i];
-
+    {
+        std::cout << std::left << table[0][i];
+        size_t padding = colWidths[i] + 2 - visual_length(table[0][i]);
+        std::cout << std::string(padding, ' ');
+    }
     std::cout << std::endl;
 
     for (size_t r = 1; r < table.size(); ++r)
     {
         for (size_t i = 0; i < table[r].size(); ++i)
-            std::cout << std::left << std::setw(colWidths[i] + 2) << table[r][i];
-
+        {
+            std::cout << std::left << table[r][i];
+            size_t padding = colWidths[i] + 2 - visual_length(table[r][i]);
+            std::cout << std::string(padding, ' ');
+        }
         std::cout << std::endl;
     }
 }
@@ -42,6 +62,9 @@ void printTable(const std::vector<std::vector<std::string>>& table)
 int main(int argc, char* argv[])
 {
     log_info("Console app started.");
+
+    SetConsoleOutputCP(65001);
+    std::cout.imbue(std::locale(""));
 
     if (argc != 4)
     {

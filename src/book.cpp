@@ -61,7 +61,8 @@ void GeneralStudPerfBook::addWork(const std::string& name, double max_score, boo
     m_work_order.push_back(name);
 }
 
-void GeneralStudPerfBook::addResult(const std::string& student, const std::string& work, double score)
+void GeneralStudPerfBook::addResult(const std::string& student, const std::string& work, double score,
+               int attempt = 1, std::string date = "", std::string notes = "")
 {
     validateName(student);
     if (m_works.find(work) == m_works.end())
@@ -79,7 +80,6 @@ void GeneralStudPerfBook::addResult(const std::string& student, const std::strin
         sc += score;
         if (sc > m_works.at(work).max_score)
             sc = m_works.at(work).max_score;
-
     }
     else
     {
@@ -236,12 +236,16 @@ void loadTablesIntoBook(GeneralStudPerfBook& book,
     if (!results_table.empty())
     {
         auto header = results_table[0];
-        size_t stud_idx = std::string::npos, work_idx = std::string::npos, score_idx = std::string::npos;
+        size_t stud_idx = std::string::npos, work_idx = std::string::npos, score_idx = std::string::npos,
+               attempt_idx = std::string::npos, date_idx = std::string::npos, notes_idx = std::string::npos;
         for (size_t i = 0; i < header.size(); ++i)
         {
             if (header[i] == "student") stud_idx = i;
             else if (header[i] == "work") work_idx = i;
             else if (header[i] == "score") score_idx = i;
+            else if (header[i] == "attempt") attempt_idx = i;
+            else if (header[i] == "date") date_idx = i;
+            else if (header[i] == "notes") notes_idx = i;
         }
         if (stud_idx == std::string::npos || work_idx == std::string::npos || score_idx == std::string::npos)
             throw std::runtime_error("Missing required columns in results table.");
@@ -251,7 +255,11 @@ void loadTablesIntoBook(GeneralStudPerfBook& book,
             std::string student = results_table[r][stud_idx];
             std::string work = results_table[r][work_idx];
             double score = std::stod(results_table[r][score_idx]);
-            book.addResult(student, work, score);
+            int attempt = (attempt_idx != std::string::npos) ? std::stoi(results_table[r][attempt_idx]) : 1;
+            std::string date = (date_idx != std::string::npos) ? results_table[r][date_idx] : "";
+            std::string notes = (notes_idx != std::string::npos) ? results_table[r][notes_idx] : "";
+
+            book.addResult(student, work, score, attempt, date, notes);
         }
     }
 }

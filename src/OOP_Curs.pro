@@ -5,32 +5,37 @@ CONFIG += c++17
 SOURCES += \
     book.cpp \
     logger.cpp \
-    mainwindow.cpp \
-    parse.cpp \
-    restable.cpp
+    parse.cpp
 
 HEADERS += \
     book.h \
     config.h \
     log.h \
     logger.h \
-    mainwindow.h \
-    parse.h \
-    restable.h
-
-FORMS += \
-    mainwindow.ui \
-    restable.ui
+    parse.h
 
 CONFIG(debug, debug|release) {
     DEFINES += DEBUG_BUILD
 }
 
 CONFIG(console) {
+    QT      -= widgets
     SOURCES += console_main.cpp
     TARGET = OOP_CURS_Console
 } else {
-    SOURCES += main.cpp
+    SOURCES += \
+        main.cpp \
+        mainwindow.cpp \
+        restable.cpp
+
+    HEADERS += \
+        mainwindow.h \
+        restable.h
+
+    FORMS += \
+        mainwindow.ui \
+        restable.ui
+
     TARGET = OOP_CURS_GUI
 }
 
