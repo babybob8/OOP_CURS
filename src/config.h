@@ -17,8 +17,8 @@ namespace Config
 
     extern bool CheckConditions;
     extern bool AdditionalNameCheck;
-    std::string_view LogPath = DefaultLogPath;
-    std::string_view OutPath = DefaultLogPath;
+    inline std::string_view LogPath = DefaultLogPath;
+    inline std::string_view OutPath = DefaultLogPath;
 }
 
 #endif // CONFIG_H
