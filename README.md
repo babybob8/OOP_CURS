@@ -43,7 +43,7 @@ debug\OOP_CURS_GUI.exe
 > #### and i kinda guess that you already have make somewhere there:
 > /bin/make
 
-- cd OOP_CURS\build\console
+- cd OOP_CURS/build/console
 - find ~/Qt -name qmake // Search for [ Qt/6.10.1/gcc_64/bin/qmake ] -> path/to/qmake
 - path/to/qmake ../../src/OOP_Curs.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug CONFIG+=console
 - /bin/make
@@ -59,7 +59,7 @@ Now you can:<br>
 > #### and i kinda guess that you already have make somewhere there:
 > /bin/make
 
-- cd OOP_CURS\build\debug
+- cd OOP_CURS/build/debug
 - find ~/Qt -name qmake // Search for [ Qt/6.10.1/gcc_64/bin/qmake ] -> path/to/qmake
 - path/to/qmake ../../src/OOP_Curs.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
 - /bin/make
