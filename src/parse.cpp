@@ -23,7 +23,25 @@ std::vector<std::vector<std::string>> c_parse_file(const QString& filename)
 {
     std::ifstream file(filename.toStdString());
 //    if (file.bad()) throw std::runtime_error("File is considered bad.");
-    if (!file.is_open()) throw std::runtime_error("Error opening file.");
+    std::string msg = "Error opening file " + filename.toStdString();
+    if (!file.is_open()) throw std::runtime_error(msg);
+    std::vector<std::vector<std::string>> file_content;
+    std::string line;
+    while (std::getline(file, line))
+    {
+        file_content.push_back(split_csv_line(line));
+    }
+
+    file.close();
+    return file_content;
+}
+
+std::vector<std::vector<std::string>> c_parse_file(const std::string& filename)
+{
+    std::ifstream file(filename);
+//    if (file.bad()) throw std::runtime_error("File is considered bad.");
+    std::string msg = "Error opening file " + filename;
+    if (!file.is_open()) throw std::runtime_error(msg);
 
     std::vector<std::vector<std::string>> file_content;
     std::string line;

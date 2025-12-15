@@ -57,9 +57,8 @@ void c_update_table(QTableWidget* table, const std::vector<std::vector<std::stri
             table->setItem(row-1, col, item);
         }
     }
-    std::stringstream msg;
-    msg << "Table [" << table->objectName().toStdString() << "] got updated.";
-    log_info(msg.str());
+    std::string msg = "Table [" + table->objectName().toStdString() + "] got updated.";
+    log_info(msg);
 }
 
 void c_compile_res(QTableWidget* table, std::map<TableType, std::vector<std::vector<std::string>>>& tables)

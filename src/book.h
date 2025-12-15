@@ -30,8 +30,7 @@ public:
 
     void addStudent(const std::string& name);
     void addWork(const std::string& name, double max_score, bool add_scores, bool mandatory, bool include_in_report);
-    void addResult(const std::string& student, const std::string& work, double score,
-                   int attempt, std::string date, std::string notes);
+    void addResult(const std::string& student, const std::string& work, double score);
 
     std::vector<std::string> getAllStudents() const noexcept;
     std::vector<std::string> getQualifiedStudents() const noexcept;
