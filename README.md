@@ -1,4 +1,4 @@
-# How to build
+# How to build (follow carefully)
 ## for WINDOWS
 ### Console app
 
@@ -13,7 +13,9 @@
 - path/to/qmake ../../src/OOP_Curs.pro -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" "CONFIG+=console"
 - path/to/make
 - path/to/windeployqt --debug debug/OOP_CURS_Console.exe
-- debug\OOP_CURS_Console.exe ../../data/student.csv ../../data/work.csv ../../data/result.csv
+
+Now you can try:<br>
+debug\OOP_CURS_Console.exe ../../data/student.csv ../../data/work.csv ../../data/result.csv
 
 ### Ui App
 
