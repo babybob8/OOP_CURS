@@ -5,7 +5,6 @@
 #include "restable.h"
 #include "logger.h"
 #include "log.h"
-#include "config.h"  // Если нужно для Config::LogPath
 
 #include <QPushButton>
 #include <QTableWidget>
