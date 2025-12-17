@@ -3,7 +3,8 @@
 
 #include <string>
 
-struct Config {
+struct Config
+{
     inline static bool CheckConditions = false;
     inline static bool AdditionalNameCheck = false;
     inline static const char* DefaultLogPath = "log.txt";

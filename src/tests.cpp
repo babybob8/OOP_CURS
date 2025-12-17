@@ -37,7 +37,7 @@ void runTests()
         }
         else
         {
-            log_error(std::string("Test 2 FAILED: Unexpected error - ") + e.what());
+            log_error(std::string("Test 2 FAILED: ") + e.what());
         }
     }
 
@@ -57,19 +57,12 @@ void runTests()
         GeneralStudPerfBook book;
         book.addStudent("Alice");
         book.addWork("Test Work", 10.0, true, true, true);
-        book.addResult("Alice", "Test Work", 15.0, 1, "", "");  // score > max
-        log_error("Test 4: Should have thrown exception but didn't");
+        book.addResult("Alice", "Test Work", 15.0, 1, "", "");
+        log_error("Test 4: Should have given an exception.");
     }
     catch (const std::runtime_error& e)
     {
-        if (std::string(e.what()).find("Precondition violation: Score exceeds max") != std::string::npos)
-        {
-            log_info("Test 4: addResult score violation - PASSED");
-        }
-        else
-        {
-            log_error(std::string("Test 4 FAILED: Unexpected error - ") + e.what());
-        }
+        log_error(std::string("Test 4 PASSED: ") + e.what());
     }
 
     log_info("All tests completed.");

@@ -96,6 +96,7 @@ int main(int argc, char* argv[])
             {
                 out_path = argv[++i];
                 Config::OutPath = std::string_view(out_path);
+                log_info("OutPath set to [" + out_path + "] via special key.");
             }
             else
             {
