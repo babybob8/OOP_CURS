@@ -25,6 +25,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this, [this](const QString& formattedMessage) {
         logs.append(formattedMessage);
     });
+
+    connect(ui->menuWindows, &QMenu::aboutToShow, this, &MainWindow::updateWindowMenu);
 }
 
 MainWindow::~MainWindow()
@@ -41,7 +43,7 @@ void MainWindow::on_actionShow_Students_Table_triggered()
     }
     Students* studentsWidget = new Students(this, students_table, fileNames[TableType::Student]);
     studentsSubWindow = ui->mdiArea->addSubWindow(studentsWidget);
-    studentsSubWindow->setWindowTitle(studentsWidget->windowTitle());
+    studentsSubWindow->setWindowTitle("Students Widget");
     studentsSubWindow->setWindowIcon(studentsWidget->windowIcon());
     studentsSubWindow->show();
 
@@ -60,7 +62,7 @@ void MainWindow::on_actionShow_Works_Table_triggered()
     }
     Work* worksWidget = new Work(this, works_table, fileNames[TableType::Work]);
     worksSubWindow = ui->mdiArea->addSubWindow(worksWidget);
-    worksSubWindow->setWindowTitle(worksWidget->windowTitle());
+    worksSubWindow->setWindowTitle("Works Widget");
     worksSubWindow->setWindowIcon(worksWidget->windowIcon());
     worksSubWindow->show();
 
@@ -79,7 +81,7 @@ void MainWindow::on_actionShow_Results_Table_triggered()
     }
     Results* resultsWidget = new Results(this, results_table, fileNames[TableType::Result]);
     resultsSubWindow = ui->mdiArea->addSubWindow(resultsWidget);
-    resultsSubWindow->setWindowTitle(resultsWidget->windowTitle());
+    resultsSubWindow->setWindowTitle("Results Widget");
     resultsSubWindow->setWindowIcon(resultsWidget->windowIcon());
     resultsSubWindow->show();
 
@@ -90,20 +92,10 @@ void MainWindow::on_actionShow_Results_Table_triggered()
 
 void MainWindow::on_actionAbout_triggered()
 {
-    if (aboutSubWindow && aboutSubWindow->widget())
-    {
-        ui->mdiArea->setActiveSubWindow(aboutSubWindow);
-        return;
-    }
-    About* aboutWidget = new About(this);
-    aboutSubWindow = ui->mdiArea->addSubWindow(aboutWidget);
-    aboutSubWindow->setWindowTitle(aboutWidget->windowTitle());
-    aboutSubWindow->setWindowIcon(aboutWidget->windowIcon());
-    aboutSubWindow->show();
-
-    connect(aboutSubWindow, &QObject::destroyed, this, [this]() {
-        aboutSubWindow = nullptr;
-    });
+    About about(this);
+    about.setWindowTitle(tr("About"));
+    about.setWindowModality(Qt::WindowModal);
+    about.exec();
 }
 
 void MainWindow::on_actionShow_Logs_triggered()
@@ -119,7 +111,7 @@ void MainWindow::on_actionShow_Logs_triggered()
             logsWidget, &Logs::appendLog);
 
     logsSubWindow = ui->mdiArea->addSubWindow(logsWidget);
-    logsSubWindow->setWindowTitle(logsWidget->windowTitle());
+    logsSubWindow->setWindowTitle("Logs Widget");
     logsSubWindow->setWindowIcon(logsWidget->windowIcon());
     logsSubWindow->show();
 
@@ -221,7 +213,7 @@ void MainWindow::on_actionView_Resulting_Table_triggered()
     }
     ResTable* resTableWidget = new ResTable(this, output_table, QString::fromStdString(Config::OutPath.data()));
     resTableSubWindow = ui->mdiArea->addSubWindow(resTableWidget);
-    resTableSubWindow->setWindowTitle(resTableWidget->windowTitle());
+    resTableSubWindow->setWindowTitle("Output Table Widget");
     resTableSubWindow->setWindowIcon(resTableWidget->windowIcon());
     resTableSubWindow->show();
 
@@ -230,3 +222,30 @@ void MainWindow::on_actionView_Resulting_Table_triggered()
     });
 }
 
+void MainWindow::updateWindowMenu()
+{
+    ui->menuWindows->clear();
+
+    QList<QMdiSubWindow *> windows = ui->mdiArea->subWindowList();
+
+    for (int i = 0; i < windows.size(); ++i)
+    {
+        QMdiSubWindow *subWindow = windows.at(i);
+        QString title = subWindow->windowTitle().isEmpty() ? tr("Untitled") : subWindow->windowTitle();
+        QString text = QString("%1 - %2").arg(i + 1).arg(title);
+
+        QAction *action = ui->menuWindows->addAction(text);
+        action->setCheckable(true);
+        action->setChecked(subWindow == ui->mdiArea->activeSubWindow());
+
+        connect(action, &QAction::triggered, this, [this, subWindow](){
+            if (subWindow)
+            {
+                ui->mdiArea->setActiveSubWindow(subWindow);
+                subWindow->showNormal();
+                subWindow->raise();
+                subWindow->setFocus();
+            }
+        });
+    }
+}

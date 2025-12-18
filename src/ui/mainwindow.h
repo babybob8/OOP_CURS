@@ -10,6 +10,16 @@
 #include <QMdiSubWindow>
 #include <QWidget>
 
+enum class WindowName
+{
+    Students,
+    Works,
+    Results,
+    ResultingTable,
+    Logs,
+    About
+};
+
 namespace Ui {
 class MainWindow;
 }
@@ -42,6 +52,8 @@ private slots:
     void on_actionAdd_Results_triggered();
 
     void on_actionView_Resulting_Table_triggered();
+
+    void updateWindowMenu();
 
 private:
     Ui::MainWindow *ui;

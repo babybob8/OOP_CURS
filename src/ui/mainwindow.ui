@@ -62,8 +62,14 @@
     <addaction name="separator"/>
     <addaction name="actionAbout"/>
    </widget>
+   <widget class="QMenu" name="menuWindows">
+    <property name="title">
+     <string>Window</string>
+    </property>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuTables"/>
+   <addaction name="menuWindows"/>
    <addaction name="menuOther"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
