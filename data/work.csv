@@ -1,4 +1,4 @@
-work,max_score,add_flag,mandatory,include
+#work,max_score,add_flag,mandatory,include
 add,10,0,0,1
 lab1,5,1,1,1
 lab2,5,1,0,1

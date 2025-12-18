@@ -14,10 +14,11 @@ enum class TableType
     Err
 };
 
+bool is_Header(const std::string& line);
 std::vector<std::string> split_csv_line(const std::string& line);
 std::vector<std::vector<std::string>> c_parse_file(const QString& filename);
 std::vector<std::vector<std::string>> c_parse_file(const std::string& filename);
-TableType get_TableType(const std::vector<std::string>& head);
+TableType get_TableType(const std::vector<std::string>& header);
 void write_csv(const std::vector<std::vector<std::string>>& table, const std::string& f_name);
 
 #endif // PARSE_H

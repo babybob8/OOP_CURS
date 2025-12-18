@@ -350,7 +350,14 @@ std::vector<std::vector<std::string>> generateCurrentResults(
     std::shared_ptr<IGeneralStudPerfBook> book_ptr = std::make_shared<GeneralStudPerfBook>();
     if (Config::AdditionalNameCheck)
         book_ptr = std::make_shared<NameValidationDecorator>(book_ptr);
+    try
+    {
+        loadTablesIntoBook(*book_ptr, students_table, works_table, results_table);
+    }
+    catch (const std::exception& e)
+    {
+        log_error(e.what());
+    }
 
-    loadTablesIntoBook(*book_ptr, students_table, works_table, results_table);
     return book_ptr->getCurrentResults();
 }

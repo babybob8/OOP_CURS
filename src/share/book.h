@@ -7,7 +7,9 @@
 #include <algorithm>
 #include <memory>
 
-struct Work
+std::string trim(std::string s);
+
+struct Works
 {
     std::string name;
     double max_score;
@@ -37,7 +39,7 @@ class GeneralStudPerfBook : public IGeneralStudPerfBook
 private:
     std::map<std::string, std::map<std::string, double>> m_scores;
     std::vector<std::string> m_work_order;
-    std::map<std::string, Work> m_works;
+    std::map<std::string, Works> m_works;
 
     bool invariantCheck() const noexcept;
     bool postconditionCheck() const noexcept;

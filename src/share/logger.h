@@ -4,7 +4,8 @@
 #include <string>
 #include <fstream>
 #include <functional>
-#include <QObject>  // я не хотел делать эт. но я не смог сделать смотрелку файлов
+
+#include <QObject>
 
 enum class logLevel
 {
@@ -26,7 +27,7 @@ public:
 
     void log(const std::string& msg, logLevel level) noexcept;
 
-signals: // :(
+signals:
     void newLog(const QString& formattedMessage);
 
 private:

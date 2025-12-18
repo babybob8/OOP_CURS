@@ -1,5 +1,6 @@
 #include "parse.h"
 #include "log.h"
+#include "book.h"
 
 #include <QString>
 #include <algorithm>
@@ -7,6 +8,16 @@
 #include <sstream>
 #include <exception>
 #include <regex>
+
+bool is_Header(const std::string& front)
+{
+    std::string trimmed = trim(front);
+    if (!trimmed.empty() && trimmed.front() == '#')
+    {
+        return true;
+    }
+    return false;
+}
 
 std::vector<std::string> split_csv_line(const std::string& line)
 {
@@ -93,6 +104,8 @@ TableType get_TableType(const std::vector<std::string>& head)
     if (!isStud && !isWork && isResult) return TableType::Result;
     return TableType::Err;
 }
+
+
 
 void write_csv(const std::vector<std::vector<std::string>>& table, const std::string& f_name)
 {

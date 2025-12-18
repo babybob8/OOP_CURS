@@ -1,6 +1,6 @@
-#include "mainwindow.h"
-#include <config.h>
-#include <log.h>
+#include "ui/mainwindow.h"
+#include "share/config.h"
+#include "share/log.h"
 
 #include <QApplication>
 

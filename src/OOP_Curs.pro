@@ -3,17 +3,21 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 CONFIG += c++17
 
 SOURCES += \
-    book.cpp \
-    logger.cpp \
-    parse.cpp \
-    tests.cpp
+    share/book.cpp \
+    share/logger.cpp \
+    share/parse.cpp \
+    share/tests.cpp \
+    ui/logs.cpp \
+    ui/mainwindow.cpp
 
 HEADERS += \
-    book.h \
-    config.h \
-    log.h \
-    logger.h \
-    parse.h
+    share/book.h \
+    share/config.h \
+    share/log.h \
+    share/logger.h \
+    share/parse.h \
+    ui/logs.h \
+    ui/mainwindow.h
 
 CONFIG(debug, debug|release) {
     DEFINES += DEBUG_BUILD
@@ -26,16 +30,25 @@ CONFIG(console) {
 } else {
     SOURCES += \
         main.cpp \
-        mainwindow.cpp \
-        restable.cpp
+        ui/restable.cpp \
+        ui/results.cpp \
+        ui/students.cpp \
+        ui/work.cpp \
+        ui/about.cpp
 
     HEADERS += \
-        mainwindow.h \
-        restable.h
+        ui/about.h \
+        ui/restable.h \
+        ui/results.h \
+        ui/students.h \
+        ui/work.h
 
     FORMS += \
-        mainwindow.ui \
-        restable.ui
+        ui/restable.ui \
+        ui/about.ui \
+        ui/results.ui \
+        ui/students.ui \
+        ui/work.ui
 
     TARGET = OOP_CURS_GUI
 }
@@ -43,3 +56,9 @@ CONFIG(console) {
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+FORMS += \
+    ui/logs.ui \
+    ui/mainwindow.ui
+
+
