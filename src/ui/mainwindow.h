@@ -7,6 +7,7 @@
 #include <map>
 
 #include <QMainWindow>
+#include <QMdiSubWindow>
 #include <QWidget>
 
 namespace Ui {
@@ -44,8 +45,12 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-
-    void loadSubWindow(QWidget *widget);
+    QMdiSubWindow* studentsSubWindow = nullptr;
+    QMdiSubWindow* worksSubWindow = nullptr;
+    QMdiSubWindow* resultsSubWindow = nullptr;
+    QMdiSubWindow* resTableSubWindow = nullptr;
+    QMdiSubWindow* logsSubWindow = nullptr;
+    QMdiSubWindow* aboutSubWindow = nullptr;
 
     std::map<TableType, QString> fileNames;
     QStringList logs;

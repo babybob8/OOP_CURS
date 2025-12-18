@@ -12,7 +12,6 @@
 #include "../share/log.h"
 #include "../share/book.h"
 
-#include <QMdiSubWindow>
 #include <QFileDialog>
 #include <QString>
 
@@ -21,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setCentralWidget(ui->mdiArea);
+//    setCentralWidget(ui->mdiArea);
     connect(&logger::instance(), &logger::newLog,
             this, [this](const QString& formattedMessage) {
         logs.append(formattedMessage);
@@ -35,43 +34,98 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionShow_Students_Table_triggered()
 {
-    loadSubWindow(new Students(this, students_table, fileNames[TableType::Student]));
+    if (studentsSubWindow && studentsSubWindow->widget())
+    {
+        ui->mdiArea->setActiveSubWindow(studentsSubWindow);
+        return;
+    }
+    Students* studentsWidget = new Students(this, students_table, fileNames[TableType::Student]);
+    studentsSubWindow = ui->mdiArea->addSubWindow(studentsWidget);
+    studentsSubWindow->setWindowTitle(studentsWidget->windowTitle());
+    studentsSubWindow->setWindowIcon(studentsWidget->windowIcon());
+    studentsSubWindow->show();
+
+    connect(studentsSubWindow, &QObject::destroyed, this, [this]() {
+        studentsSubWindow = nullptr;
+    });
 }
 
 
 void MainWindow::on_actionShow_Works_Table_triggered()
 {
-    loadSubWindow(new Work(this, works_table, fileNames[TableType::Work]));
+    if (worksSubWindow && worksSubWindow->widget())
+    {
+        ui->mdiArea->setActiveSubWindow(worksSubWindow);
+        return;
+    }
+    Work* worksWidget = new Work(this, works_table, fileNames[TableType::Work]);
+    worksSubWindow = ui->mdiArea->addSubWindow(worksWidget);
+    worksSubWindow->setWindowTitle(worksWidget->windowTitle());
+    worksSubWindow->setWindowIcon(worksWidget->windowIcon());
+    worksSubWindow->show();
+
+    connect(worksSubWindow, &QObject::destroyed, this, [this]() {
+        worksSubWindow = nullptr;
+    });
 }
 
 
 void MainWindow::on_actionShow_Results_Table_triggered()
 {
-    loadSubWindow(new Results(this, results_table, fileNames[TableType::Result]));
+    if (resultsSubWindow && resultsSubWindow->widget())
+    {
+        ui->mdiArea->setActiveSubWindow(resultsSubWindow);
+        return;
+    }
+    Results* resultsWidget = new Results(this, results_table, fileNames[TableType::Result]);
+    resultsSubWindow = ui->mdiArea->addSubWindow(resultsWidget);
+    resultsSubWindow->setWindowTitle(resultsWidget->windowTitle());
+    resultsSubWindow->setWindowIcon(resultsWidget->windowIcon());
+    resultsSubWindow->show();
+
+    connect(resultsSubWindow, &QObject::destroyed, this, [this]() {
+        resultsSubWindow = nullptr;
+    });
 }
 
 void MainWindow::on_actionAbout_triggered()
 {
-    loadSubWindow(new About(this));
+    if (aboutSubWindow && aboutSubWindow->widget())
+    {
+        ui->mdiArea->setActiveSubWindow(aboutSubWindow);
+        return;
+    }
+    About* aboutWidget = new About(this);
+    aboutSubWindow = ui->mdiArea->addSubWindow(aboutWidget);
+    aboutSubWindow->setWindowTitle(aboutWidget->windowTitle());
+    aboutSubWindow->setWindowIcon(aboutWidget->windowIcon());
+    aboutSubWindow->show();
+
+    connect(aboutSubWindow, &QObject::destroyed, this, [this]() {
+        aboutSubWindow = nullptr;
+    });
 }
 
 void MainWindow::on_actionShow_Logs_triggered()
 {
+    if (logsSubWindow && logsSubWindow->widget())
+    {
+        ui->mdiArea->setActiveSubWindow(logsSubWindow);
+        return;
+    }
 
-    Logs *logsWindow = new Logs(this, logs, QString::fromStdString(Config::LogPath.data()));
-
+    Logs *logsWidget = new Logs(this, logs, QString::fromStdString(Config::LogPath.data()));
     connect(&logger::instance(), &logger::newLog,
-            logsWindow, &Logs::appendLog);
+            logsWidget, &Logs::appendLog);
 
-    loadSubWindow(logsWindow);
-}
+    logsSubWindow = ui->mdiArea->addSubWindow(logsWidget);
+    logsSubWindow->setWindowTitle(logsWidget->windowTitle());
+    logsSubWindow->setWindowIcon(logsWidget->windowIcon());
+    logsSubWindow->show();
 
-void MainWindow::loadSubWindow(QWidget *widget)
-{
-    auto window = ui->mdiArea->addSubWindow(widget);
-    window->setWindowTitle(widget->windowTitle());
-    window->setWindowIcon(widget->windowIcon());
-    window->show();
+    connect(logsSubWindow, &QObject::destroyed, this, [this]() {
+        logsSubWindow = nullptr;
+    });
 }
 
 void MainWindow::addTable(const QString& filePath)
@@ -160,6 +214,19 @@ void MainWindow::on_actionAdd_Results_triggered()
 
 void MainWindow::on_actionView_Resulting_Table_triggered()
 {
-    loadSubWindow(new ResTable(this, output_table, QString::fromStdString(Config::OutPath.data())));
+    if (resTableSubWindow && resTableSubWindow->widget())
+    {
+        ui->mdiArea->setActiveSubWindow(resTableSubWindow);
+        return;
+    }
+    ResTable* resTableWidget = new ResTable(this, output_table, QString::fromStdString(Config::OutPath.data()));
+    resTableSubWindow = ui->mdiArea->addSubWindow(resTableWidget);
+    resTableSubWindow->setWindowTitle(resTableWidget->windowTitle());
+    resTableSubWindow->setWindowIcon(resTableWidget->windowIcon());
+    resTableSubWindow->show();
+
+    connect(resTableSubWindow, &QObject::destroyed, this, [this]() {
+        resTableSubWindow = nullptr;
+    });
 }
 

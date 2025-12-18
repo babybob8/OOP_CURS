@@ -11,8 +11,8 @@ Logs::Logs(QWidget *parent, QStringList logs, QString fname) :
     for (const QString& line : logs)
     {
         ui->logsPlainTextEdit->appendPlainText(line);
-        ui->logsPathLabel->setText(fname);
     }
+    ui->logsPathLabel->setText(fname);
 }
 
 Logs::~Logs()
