@@ -1,9 +1,9 @@
-#include "book.h"
-#include "parse.h"
-#include "logger.h"
-#include "log.h"
-#include "config.h"
-#include "tests.cpp"
+#include "share/book.h"
+#include "share/parse.h"
+#include "share/logger.h"
+#include "share/log.h"
+#include "share/config.h"
+#include "share/tests.cpp"
 
 #include <iostream>
 #include <vector>
@@ -131,7 +131,7 @@ int main(int argc, char* argv[])
 
     if (run_tests)
     {
-        runTests();
+        runTestss();
         return 0;
     }
 
